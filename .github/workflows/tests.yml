@@ -22,10 +22,9 @@ jobs:
     - name: Install Dependencies
       run: pip install -r requirements.txt
 
-    - run: cd backend
 
     - name: Run Tests
-      run: pytest
+      run: cd backend && pytest
 
 
       
