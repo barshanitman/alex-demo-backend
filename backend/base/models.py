@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+
+# Managers
+class ProjectManager(models.Manager):
+    def create_project(self,creator:int,name:str,description:str):
+        project = self.create(creator=creator,name=name,description=description)
+        return project
+
 # Create your models here.
 
 class Project(models.Model):
@@ -8,6 +16,8 @@ class Project(models.Model):
     name:str = models.CharField(max_length=256,null=False)
     description:str  = models.TextField(null=True,blank=True)
     createdAt:str = models.DateTimeField(auto_now_add=True)
+
+    objects = ProjectManager()
 
     def __str__(self) -> str:
         return str(self.name)
@@ -37,30 +47,4 @@ class Stage(models.Model):
 
     def __str__() -> str:
         pass
-
-
-
-
-
-
-
-    
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
 
