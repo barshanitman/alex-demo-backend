@@ -33,6 +33,10 @@ def test_get_project_by_id(project):
     response = client.get(f"/api/project/{project.id}")
     assert response.status_code == 200
 
+@pytest.mark.django_db
+def test_get_all_tickets():
+    response  = client.get("/api/ticket/")
+    assert response.status_code == 200
 
 
 

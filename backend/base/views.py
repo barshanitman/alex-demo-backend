@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .serializers import ProjectSerializer, UserSerializer
+from .serializers import ProjectSerializer, TicketSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Project,User
-
+from .models import Project, Ticket,User
 
 # Create your views here.
 @api_view(["GET","POST"])
@@ -64,3 +63,21 @@ def get_user_by_id(request,id):
     return Response("Project does not exist",status=status.HTTP_204_NO_CONTENT)
 
    
+@api_view(["GET","POST"])
+def tickets(request):
+    if request.method == "GET":
+        tickets = Ticket.objects.all()
+        if tickets is not None:
+            serializer = TicketSerializer(tickets,many=True)
+            return Response(serializer.data)
+        return Response("No tickets",status=status.HTTP_204_NO_CONTENT)
+    
+    elif request.method == "POST":
+        serializer = TicketSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    return Response("Endpoint only accepts GET and POST",status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
